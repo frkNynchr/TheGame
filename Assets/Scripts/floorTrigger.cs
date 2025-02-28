@@ -9,12 +9,6 @@ public class floorTrigger : MonoBehaviour
     {
         ch = transform.root.gameObject.GetComponent<MyCharacter>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     void OnTriggerEnter2D()
     {
         ch.isFloor = true;

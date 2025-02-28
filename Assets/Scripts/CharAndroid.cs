@@ -10,11 +10,6 @@ public class CharAndroid : MonoBehaviour
         cr = GetComponent<MyCharacter>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void left()
     {
         cr.leftB = true;
