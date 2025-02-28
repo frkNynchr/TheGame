@@ -3,13 +3,16 @@ using UnityEngine;
 public class Camera : MonoBehaviour
 {
     public Transform character;
+    public Transform mainCamera;
     void Start()
     {
-        character = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+        character = GameObject.FindGameObjectWithTag("Player").transform;
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
     void Update()
     {
-        transform.position = new Vector3(character.position.x, character.position.y, -10);
+        mainCamera.transform.position = new Vector3(character.position.x + 1, character.position.y, -10);
+
     }
 }
