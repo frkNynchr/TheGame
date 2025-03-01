@@ -7,12 +7,12 @@ public class MyCharacter : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public float speed, maxSpeed, jumpPower, h;
-    public bool isFloor, dJump, isAndorid, leftB, rightB, jumpB;
+    public bool isFloor, dJump, isAndorid, leftB, rightB, jumpB, isPaused;
     Rigidbody2D weight;
     Animator anim;
-    public int health, maxHealth, star, coin;
+    public int health, maxHealth;
+    public int coin = 0;
     public GameObject[] healths;
-    public GameObject[] stars;
     public Text coinCount;
     public AudioClip[] sounds;
     public GameObject androidPanel;
@@ -22,12 +22,9 @@ public class MyCharacter : MonoBehaviour
         anim = GetComponent<Animator>();
         weight = GetComponent<Rigidbody2D>();
         health = maxHealth;
-        star = 0;
-        coin = 0;
         healthSys();
     }
 
-    // Update is called once per frame
     void Update()
     {
         coinCount.text = "" + coin;
@@ -92,28 +89,36 @@ public class MyCharacter : MonoBehaviour
         }
         else
         {
-            h = Input.GetAxis("Horizontal");
-            //weight.AddForce(Vector3.right * h * speed);
-            transform.Translate(-h * speed * Time.deltaTime, 0, 0);
-            anim.SetFloat("speed", Mathf.Abs(h));
-            anim.SetBool("isFloor", isFloor);
+            if (!isPaused) // Eğer oyun duraklatılmadıysa hareket et
+            {
+                h = Input.GetAxis("Horizontal");
+                //weight.AddForce(Vector3.right * h * speed);
+                transform.Translate(-h * speed * Time.deltaTime, 0, 0);
+                anim.SetFloat("speed", Mathf.Abs(h));
+                anim.SetBool("isFloor", isFloor);
 
-            if (h > 0.01f)
-            {
-                transform.localScale = new Vector2(0.5f, 0.5f);
+                if (h > 0.01f)
+                {
+                    transform.localScale = new Vector2(0.5f, 0.5f);
+                }
+                if (h < -0.01f)
+                {
+                    transform.localScale = new Vector2(-0.5f, 0.5f);
+                }
+                if (weight.linearVelocity.x > maxSpeed)
+                {
+                    weight.linearVelocity = new Vector2(maxSpeed, weight.linearVelocity.y);
+                }
+                if (weight.linearVelocity.x < -maxSpeed)
+                {
+                    weight.linearVelocity = new Vector2(-maxSpeed, weight.linearVelocity.y);
+                }
             }
-            if (h < -0.01f)
+            else
             {
-                transform.localScale = new Vector2(-0.5f, 0.5f);
+                weight.linearVelocity = Vector2.zero; // Durdur
             }
-            if (weight.linearVelocity.x > maxSpeed)
-            {
-                weight.linearVelocity = new Vector2(maxSpeed, weight.linearVelocity.y);
-            }
-            if (weight.linearVelocity.x < -maxSpeed)
-            {
-                weight.linearVelocity = new Vector2(-maxSpeed, weight.linearVelocity.y);
-            }
+
         }
     }
 
@@ -132,6 +137,15 @@ public class MyCharacter : MonoBehaviour
             Invoke("Stand", 0.5f);
             healthSys();
         }
+        if (collision.gameObject.tag == "deathLine")
+        {
+            health -= 1;
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("Stand", 0.5f);
+            healthSys();
+            transform.position = new Vector3(0.3f, 1.9f, 0f);
+        }
+
     }
     void healthSys()
     {
@@ -146,12 +160,6 @@ public class MyCharacter : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Star")
-        {
-            Destroy(collision.gameObject);
-            GetComponent<AudioSource>().PlayOneShot(sounds[0]);
-            starSys();
-        }
         if (collision.gameObject.tag == "Coin")
         {
             Destroy(collision.gameObject);
@@ -173,16 +181,11 @@ public class MyCharacter : MonoBehaviour
         }
         if (collision.gameObject.tag == "finish")
         {
-            Application.LoadLevel("MainMenu");
+            Application.LoadLevel("LevelSelect");
         }
-    }
-
-    void starSys()
-    {
-        star += 1;
-        for (int i = 0; i < star; i++)
+        if (collision.gameObject.tag == "info")
         {
-            stars[i].SetActive(true);
+            collision.gameObject.SetActive(true);
         }
     }
 
@@ -194,5 +197,9 @@ public class MyCharacter : MonoBehaviour
     public void Jump()
     {
         weight.AddForce(Vector2.up * jumpPower);
+    }
+    public void Pause()
+    {
+        isPaused = !isPaused;
     }
 }
