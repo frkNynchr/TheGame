@@ -10,6 +10,9 @@ TagManager:
   - Coin
   - plusHealth
   - finish
+  - death
+  - info
+  - deathLine
   layers:
   - Default
   - TransparentFX
