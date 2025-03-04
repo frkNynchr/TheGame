@@ -13,6 +13,8 @@ TagManager:
   - death
   - info
   - deathLine
+  - enemy
+  - headTrig
   layers:
   - Default
   - TransparentFX
