@@ -16,6 +16,7 @@ public class MyCharacter : MonoBehaviour
     public Text coinCount;
     public AudioClip[] sounds;
     public GameObject androidPanel;
+    public GameObject enemy;
 
     void Start()
     {
@@ -145,6 +146,14 @@ public class MyCharacter : MonoBehaviour
             healthSys();
             transform.position = new Vector3(0.3f, 1.9f, 0f);
         }
+        if (collision.gameObject.tag == "enemy")
+        {
+            health -= 1;
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("Stand", 0.5f);
+            healthSys();
+            Jump();
+        }
 
     }
     void healthSys()
@@ -183,9 +192,10 @@ public class MyCharacter : MonoBehaviour
         {
             Application.LoadLevel("LevelSelect");
         }
-        if (collision.gameObject.tag == "info")
+        if (collision.gameObject.tag == "headTrig")
         {
-            collision.gameObject.SetActive(true);
+            Jump();
+            Destroy(enemy);
         }
     }
 
