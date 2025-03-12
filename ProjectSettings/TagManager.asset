@@ -15,6 +15,10 @@ TagManager:
   - deathLine
   - enemy
   - headTrig
+  - bullet
+  - ball
+  - range
+  - floor
   layers:
   - Default
   - TransparentFX
