@@ -9,16 +9,19 @@ public class floorTrigger : MonoBehaviour
     {
         ch = transform.root.gameObject.GetComponent<MyCharacter>();
     }
-    void OnTriggerEnter2D()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        ch.isFloor = true;
+        if (collision.gameObject.tag == "floor")
+        {
+            ch.isFloor = true;
+        }
     }
-    void OnTriggerStay2D()
+    void OnTriggerStay2D(Collider2D collision)
     {
-        ch.isFloor = true;
+        if (collision.gameObject.tag == "floor") ch.isFloor = true;
     }
-    void OnTriggerExit2D()
+    void OnTriggerExit2D(Collider2D collision)
     {
-        ch.isFloor = false;
+        if (collision.gameObject.tag == "floor") ch.isFloor = false;
     }
 }

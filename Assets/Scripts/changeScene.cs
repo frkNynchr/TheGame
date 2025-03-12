@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class changeScene : MonoBehaviour
 {
     public void changeScenes()
     {
-        Application.LoadLevel("LevelSelect");
+        SceneManager.LoadScene("LevelSelect");
     }
 }

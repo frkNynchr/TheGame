@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class goLevel : MonoBehaviour
 {
 
     public void levels(int levelid)
     {
-        Application.LoadLevel(levelid);
+        SceneManager.LoadScene(levelid);
     }
 }

@@ -17,6 +17,9 @@ public class MyCharacter : MonoBehaviour
     public AudioClip[] sounds;
     public GameObject androidPanel;
     public GameObject enemy;
+    public GameObject waterBall;
+    public Transform atesNoktasi;
+    public float mermiHizi;
 
     void Start()
     {
@@ -31,7 +34,7 @@ public class MyCharacter : MonoBehaviour
         coinCount.text = "" + coin;
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Application.LoadLevel(Application.loadedLevel);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
         }
         if (Input.GetKeyDown(KeyCode.Space))
@@ -125,7 +128,7 @@ public class MyCharacter : MonoBehaviour
 
     void death()
     {
-        Application.LoadLevel(Application.loadedLevel);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -190,12 +193,20 @@ public class MyCharacter : MonoBehaviour
         }
         if (collision.gameObject.tag == "finish")
         {
-            Application.LoadLevel("LevelSelect");
+            SceneManager.LoadScene("LevelSelect");
         }
         if (collision.gameObject.tag == "headTrig")
         {
             Jump();
             Destroy(enemy);
+        }
+        if (collision.gameObject.tag == "bullet")
+        {
+            health -= 1;
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("Stand", 0.5f);
+            healthSys();
+            Destroy(collision.gameObject);
         }
     }
 
@@ -211,5 +222,35 @@ public class MyCharacter : MonoBehaviour
     public void Pause()
     {
         isPaused = !isPaused;
+    }
+    public void Attack(GameObject enemy)
+    {
+        // Debug.Log("Düşman tespit edildi! Ateş ediliyor: " + enemy.name);
+        // GameObject bullet = Instantiate(waterBall, atesNoktasi.position, Quaternion.identity);
+        //bullet.GetComponent<Rigidbody2D>().linearVelocity = (enemy.transform.position - transform.position).normalized * mermiHizi;
+        // Düşman ve karakter arasındaki pozisyon farkını hesapla
+        // Düşman ve karakter arasındaki pozisyon farkını hesapla
+        Vector2 direction = (enemy.transform.position - transform.position).normalized;
+
+        // Eğer mermi prefab'ı varsa, instantiate et
+        GameObject bullet = Instantiate(waterBall, atesNoktasi.position, Quaternion.identity);
+
+        // Merminin hareketini linearVelocity ile ayarla
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.linearVelocity = direction * mermiHizi;
+
+        // Merminin doğru yönü alması için rotation ayarla
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        // Merminin doğru yönü alması için scale ayarla (geri dönüşü kontrol etmek için)
+        if (direction.x > 0)
+        {
+            bullet.transform.localScale = new Vector3(0.1f, 0.1f, 1);  // Sağ yöne ateş
+        }
+        else if (direction.x < 0)
+        {
+            bullet.transform.localScale = new Vector3(-0.1f, 0.1f, 1); // Sol yöne ateş
+        }
     }
 }
