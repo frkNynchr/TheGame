@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 4179243677173219542}
   m_Layer: 0
   m_Name: collider
-  m_TagString: Untagged
+  m_TagString: turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 4089480268777573208}
   m_Layer: 0
   m_Name: turret
-  m_TagString: Untagged
+  m_TagString: turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

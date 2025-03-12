@@ -24,4 +24,5 @@ public class projectile : MonoBehaviour
     {
         ballRb.linearVelocity = new Vector2(speed, ballRb.linearVelocity.y);
     }
+
 }

@@ -19,6 +19,7 @@ TagManager:
   - ball
   - range
   - floor
+  - turret
   layers:
   - Default
   - TransparentFX

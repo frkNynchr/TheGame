@@ -6,9 +6,14 @@ public class attackBall : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("enemy"))
+        if (other.gameObject.CompareTag("turret"))
         {
+            Debug.Log("Düşman tespit edildi! Ateş ediliyor: " + other.tag);
             karakter.Attack(other.gameObject);
+        }
+        else
+        {
+            Debug.Log("Düşman tespit edilmedi!" + other.tag);
         }
     }
 }

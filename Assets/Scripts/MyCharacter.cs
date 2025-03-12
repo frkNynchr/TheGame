@@ -18,7 +18,8 @@ public class MyCharacter : MonoBehaviour
     public GameObject androidPanel;
     public GameObject enemy;
     public GameObject waterBall;
-    public Transform atesNoktasi;
+    public Transform atesNoktasiSag;  // Sağ atış noktası
+    public Transform atesNoktasiSol;  // Sol atış noktası
     public float mermiHizi;
 
     void Start()
@@ -208,6 +209,11 @@ public class MyCharacter : MonoBehaviour
             healthSys();
             Destroy(collision.gameObject);
         }
+        if (collision.gameObject.CompareTag("turret")) // Eğer turret'e girdiyse
+        {
+            // Turret'e ateş etme işlemi
+            Attack(collision.gameObject);  // Bu fonksiyon ateş etmeyi tetikleyecek
+        }
     }
 
     void Stand()
@@ -223,34 +229,37 @@ public class MyCharacter : MonoBehaviour
     {
         isPaused = !isPaused;
     }
-    public void Attack(GameObject enemy)
+    public void Attack(GameObject turrets)
     {
-        // Debug.Log("Düşman tespit edildi! Ateş ediliyor: " + enemy.name);
-        // GameObject bullet = Instantiate(waterBall, atesNoktasi.position, Quaternion.identity);
-        //bullet.GetComponent<Rigidbody2D>().linearVelocity = (enemy.transform.position - transform.position).normalized * mermiHizi;
-        // Düşman ve karakter arasındaki pozisyon farkını hesapla
-        // Düşman ve karakter arasındaki pozisyon farkını hesapla
-        Vector2 direction = (enemy.transform.position - transform.position).normalized;
-
-        // Eğer mermi prefab'ı varsa, instantiate et
-        GameObject bullet = Instantiate(waterBall, atesNoktasi.position, Quaternion.identity);
-
-        // Merminin hareketini linearVelocity ile ayarla
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.linearVelocity = direction * mermiHizi;
-
-        // Merminin doğru yönü alması için rotation ayarla
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
-        // Merminin doğru yönü alması için scale ayarla (geri dönüşü kontrol etmek için)
-        if (direction.x > 0)
+        if (turrets != null)
         {
-            bullet.transform.localScale = new Vector3(0.1f, 0.1f, 1);  // Sağ yöne ateş
-        }
-        else if (direction.x < 0)
-        {
-            bullet.transform.localScale = new Vector3(-0.1f, 0.1f, 1); // Sol yöne ateş
+            // Düşman tespiti ve ateş etme mantığı
+            Debug.Log("Düşman tespit edildi! Ateş ediliyor: " + turrets.name);
+            Vector2 direction = (turrets.transform.position - transform.position).normalized;
+
+            // Hangi yönde hareket ettiğimize göre atış noktasını seç
+            Transform atesNoktasi = (direction.x > 0) ? atesNoktasiSag : atesNoktasiSol;
+
+            // Eğer mermi prefab'ı varsa, instantiate et
+            GameObject bullet = Instantiate(waterBall, atesNoktasi.position, Quaternion.identity);
+
+            // Merminin hareketini linearVelocity ile ayarla
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.linearVelocity = direction * mermiHizi;
+
+            // Merminin doğru yönü alması için rotation ayarla
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+            // Merminin doğru yönü alması için scale ayarla (geri dönüşü kontrol etmek için)
+            if (direction.x > 0)
+            {
+                bullet.transform.localScale = new Vector3(0.1f, 0.1f, 1);  // Sağ yöne ateş
+            }
+            else if (direction.x < 0)
+            {
+                bullet.transform.localScale = new Vector3(-0.1f, 0.1f, 1); // Sol yöne ateş
+            }
         }
     }
 }
