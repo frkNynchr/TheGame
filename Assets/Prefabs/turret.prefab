@@ -478,5 +478,5 @@ MonoBehaviour:
   bullet: {fileID: 0}
   target: {fileID: 0}
   anim: {fileID: 0}
-  shootPointLeft: {fileID: 0}
-  shootPointRight: {fileID: 0}
+  shootPointLeft: {fileID: 606925977842671972}
+  shootPointRight: {fileID: 4294059299969516997}
