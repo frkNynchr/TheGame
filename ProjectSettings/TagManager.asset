@@ -20,6 +20,7 @@ TagManager:
   - range
   - floor
   - turret
+  - waterBall
   layers:
   - Default
   - TransparentFX
@@ -27,8 +28,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - player
+  - waterball
   - 
   - 
   - 
